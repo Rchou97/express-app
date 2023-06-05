@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  watchtower:
+    image: container/watchtower
+    environment:
+      - WATCHTOWER_ROLL_INTERVAL=60 # Poll every 60 seconds 
+    volumes: 
+      - /var/run/docker.sock:/var/run/docker.sock
+    container_name: watchtower
+  
+  ci-cd:
+    image: rchou97/express-app:latest 
+    build: .
+    ports:
+      - 8000:8000
+    labels: 
+      - "com.centurylinklabs.watchtower.enable=true"
+    container_name: express-app
